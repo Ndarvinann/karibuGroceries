@@ -1,0 +1,209 @@
+
+:root {
+    --sidebar-width: 280px;
+    --primary-green: #28a745;
+    --secondary-yellow: #ffc107;
+    --light-bg: #f8f9fa;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--light-bg);
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    background-color: rgba(231, 178, 231, 0.18);
+    color: #333;
+    box-shadow: 2px 0 10px rgba(67, 2, 2, 0.5);
+    z-index: 1000;
+}
+
+.sidebar .nav-link {
+    color: #333;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    transition: all 0.2s;
+    padding: 10px 15px;
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(40, 167, 69, 0.1);
+}
+
+.sidebar .nav-link.active {
+    background-color: var(--primary-green);
+    color: white;
+    font-weight: 600;
+}
+
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding: 20px;
+    width: calc(100% - var(--sidebar-width));
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+.stat-card {
+    border-left: 6px solid;
+}
+
+.stat-card.total-products {
+    border-left-color: var(--primary-green);
+    background-color: rgba(40, 167, 69, 0.1);
+}
+
+.stat-card.low-stock {
+    border-left-color: var(--secondary-yellow);
+    background-color: rgba(255, 193, 7, 0.1)
+}
+
+.stat-card.out-of-stock {
+    border-left-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1)
+}
+
+.table-responsive {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead {
+    background-color: var(--primary-green);
+    color: white;
+}
+
+.table th {
+    font-weight: 500;
+}
+
+.stock-high {
+    background-color: rgba(40, 167, 69, 0.05);
+}
+
+.stock-medium {
+    background-color: rgba(255, 193, 7, 0.1);
+}
+
+.stock-low {
+    background-color: rgba(220, 53, 69, 0.05);
+}
+
+.badge-stock {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+.badge-high {
+    background-color: rgba(40, 167, 69,0.8);
+    color: var(--primary-green);
+}
+
+.badge-medium {
+    background-color: rgba(255, 193, 7,1);
+    color: #d39e00;
+}
+
+.badge-low {
+    background-color: rgba(220, 53, 69,1);
+    color: #dc3545;
+}
+
+.search-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.search-container i {
+    position: absolute;
+    left: 15px;
+    top: 12px;
+    color: #6c757d;
+}
+
+.search-input {
+    padding-left: 40px;
+    border-radius: 30px;
+    border: 1px solid #ced4da;
+}
+
+.btn-success {
+    background-color: var(--primary-green);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 30px;
+}
+
+.btn-warning {
+    background-color: var(--secondary-yellow);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 30px;
+    color: #333;
+}
+
+.adjust-input {
+    width: 80px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    padding: 5px 10px;
+    text-align: center;
+}
+
+.audit-log {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.log-item {
+    border-left: 3px solid var(--primary-green);
+    padding-left: 15px;
+    margin-bottom: 15px;
+}
+
+.log-date {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.filter-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+}
+
+.procurement-location {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    background-color: #e8f4fc;
+    color: #0056b3;
+}
+
+.sidebar-header {
+    padding: 20px 15px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+}
+
+.sidebar-header h4 {
+    color: var(--primary-green);
+    font-weight: 700;
+}
