@@ -3,11 +3,16 @@ const router = express.Router();
 const CashSale = require('../model/cashSaleSchema');
 const CreditSale = require('../model/creditsaleSchema');
 const Procurement = require('../model/procurementShema');
+const connectEnsureLogin = require('connect-ensure-login'); // Assuming you need this middleware
 
-
-// Dashboard page render - keep HTML rendering separate
-router.get("/directordash", (req, res) => {
-    res.render('directorDash');
+// Dashboard page render
+router.get("/directordash", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+    const user = req.user;
+    if (user.role !== "director") {
+        return res.status(403).send("Access denied: You are not allowed to access this page.");
+        // res.render('directorDash');
+    }
+    res.render('directorDash'); // Assuming you want to render the dashboard page for directors
 });
 
 // API endpoint for dashboard statistics - ensure proper JSON response
@@ -17,7 +22,7 @@ router.get("/api/stats", async (req, res) => {
         let startDate, endDate;
 
         // Set date range based on filter
-        switch(filter) {
+        switch (filter) {
             case 'week':
                 startDate = new Date();
                 startDate.setDate(startDate.getDate() - 7);
@@ -77,7 +82,7 @@ router.get("/api/stats", async (req, res) => {
 
         const totalSales = (cashSales[0]?.total || 0) + (creditSales[0]?.total || 0);
         const totalProcurement = procurements[0]?.total || 0;
-        
+
         const currentTotal = currentPeriodSales[0]?.total || 0;
         const previousTotal = previousPeriodSales[0]?.total || 0;
         const trend = previousTotal ? ((currentTotal - previousTotal) / previousTotal * 100).toFixed(1) : 0;
@@ -98,14 +103,14 @@ router.get("/api/chart", async (req, res) => {
     try {
         const months = [];
         const salesData = [];
-        
+
         // Get last 6 months of data
         for (let i = 5; i >= 0; i--) {
             const date = new Date();
             date.setMonth(date.getMonth() - i);
             const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
             const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-            
+
             const [cashSales, creditSales] = await Promise.all([
                 CashSale.aggregate([
                     {
@@ -140,11 +145,11 @@ router.get("/api/chart", async (req, res) => {
                     }
                 ])
             ]);
-            
+
             months.push(date.toLocaleString('default', { month: 'short' }));
             salesData.push((cashSales[0]?.total || 0) + (creditSales[0]?.total || 0));
         }
-        
+
         res.json({
             labels: months,
             data: salesData
