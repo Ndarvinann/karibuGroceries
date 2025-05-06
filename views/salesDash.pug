@@ -1,164 +1,168 @@
 doctype html
 head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title Dashboard - Overview
-  link(rel='stylesheet' href='/css/kglCss/managerDash.css')
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet')
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    title Dashboard - Overview
+    link(rel='stylesheet' href='/kglCss/managerDash.css')
+    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet')
 
 body
-  .container-fluid
-    .row
-      //- Sidebar
-      nav.col-md-2.d-none.d-md-block.bg-light.sidebar
-        h1 Features
-        .position-sticky
-          ul.nav.flex-column.p-3
-
-            li.nav-item
-              a.nav-link(href='#') &#x1F4CA; Analytics
-            li.nav-item
-              a.nav-link(href='/') &#x1F6D2;Home
-            li.nav-item
-              a.nav-link(href='#') &#x1FAD8;Products
-            li.nav-item
-              a.nav-link(href='#') &#x2728;sales
-            li.nav-item
-              a.nav-link(href='#') &#x2699;&#xFE0F; Credit
-            li.nav-item
-              a.nav-link(href='#') &#x1F3E6;Payments
-            li.nav-item
-              a.nav-link(href='#') &#x2699;&#xFE0F; settings
-            li.nav-item
-              a.nav-link(href='/logout') &#x274C;logout
-
-      //- Main Content
-      main.col-md-10.ms-sm-auto.px-md-4.py-4
-        //- Page Header
-        .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center.pt-3.pb-2.mb-3.border-bottom
-          h1.h2 Dashboard Overview
-          .btn-toolbar.mb-2.mb-md-0
-            .btn-group.me-2
-              button.btn.btn-sm.btn-outline-secondary(type='button') Export
-
-        //- Current Stock Levels
-        .dashboard-card.card.mb-4
-          .card-header.d-flex.justify-content-between.align-items-center
-            span &#x1F4E6; Current Stock Levels
-            small.text-muted Updated 5 minutes ago
-          .table-responsive
-            table.table.table-hover.mb-0
-              thead
-                tr
-                  th Produce
-                  th Current Stock
-                  th Status
-                  th Last Restock
-              tbody
-                each product in products
-                  tr(class=product.lowStock ? 'table-warning' : '')
-                    td= product.name
-                    td= product.stock + "kgs"
-                    td
-                      if product.stock <= 0
-                        span.badge.bg-danger Out of Stock
-                      else if product.lowStock
-                        span.badge.bg-warning Low Stock
-                      else
-                        span.badge.bg-success In Stock
-                    td=helpers.formatDate(product.lastRestockDate)
+    .container-fluid
         .row
-          //- Recent Sales Activity
-          .col-md-6
-            .dashboard-card.card.h-100
-              .card-header
-                | &#x1F6CD;&#xFE0F; Recent Sales Activity
-              .card-body
-                .card-body
-                .table-responsive
-                  table.table.table-sm
-                    thead
-                      tr
-                        th Type
-                        th Buyer
-                        th Product
-                        th Amount
-                        th Date
-                    tbody
-                      each sale in recentSales
-                        tr
-                          td
-                            span.badge(class=sale.type === 'cash' ? 'bg-success' : 'bg-primary')
-                              = sale.type.toUpperCase()
-                          td= sale.buyer
-                          td= sale.product
-                          td= helpers.formatCurrency(sale.amount)
-                          td= helpers.formatDate(sale.date)
+            //- Sidebar
+            nav.col-md-2.d-none.d-md-block.bg-light.sidebar
+                h1 Features
+                .position-sticky
+                    ul.nav.flex-column.p-3
+                        li.nav-item
+                            a.nav-link(href='/') &#x1F6D2;Home
+                        li.nav-item
+                            a.nav-link(href='/addCashPayment') &#x2699;&#xFE0F; Credit
+                        li.nav-item
+                            a.nav-link(href='/addCashPayment') &#x1F3E6;Payments
+                        li.nav-item
+                            a.nav-link(href='/logout') &#x274C;logout
 
-          //- Credit Payments
-          .col-md-6
-            .dashboard-card.card.h-100
-              .card-header
-                | &#x1F4B3; Credit Payments
-              .card-body
-                .table-responsive
-                  table.table.table-sm
-                    thead
-                      tr
-                        th Customer
-                        th Amount Due
-                        th Due Date
-                        th Status
-                    tbody
-                      each credit in creditSales
-                        tr
-                          td= credit.creditBuyer
-                          td= helpers.formatCurrency(credit.creditAmount)
-                          td= helpers.formatDate(credit.creditDueDate)
-                          td
-                            if credit.status === 'Pending'
-                              span.badge.bg-warning.text-dark Pending
-                            else if credit.status === "overdue"
-                              span.badge.bg-danger.text-light Overdue!!
-                            else
-                              span.badge.bg-success.text-light Paid
-        //- Sales Trends
-        .dashboard-card.card.mt-4
-          .card-header.d-flex.justify-content-between.align-items-center
-            span &#x1F4C8; Sales Trends (Last 30 Days)
-            .btn-group
-              button.btn.btn-sm.btn-outline-secondary Daily
-              button.btn.btn-sm.btn-outline-secondary.active Weekly
-              button.btn.btn-sm.btn-outline-secondary Monthly
-          .card-body
-            .chart-container
-              div(style='background-color: #f8f9fa; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 4px;')
-                | [Chart should display here]
-        //- Report Generation
-        .dashboard-card.card.mt-4
-          .card-header
-            | &#x1F4C4; Generate Reports
-          .card-body
-            .row
-              .col-md-6
-                h5 Sales Reports
-                .mb-3
-                  .row
+            //- Main Content
+            main.col-md-10.ms-sm-auto.px-md-4.py-4
+                //- Page Header
+                .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center.pt-3.pb-2.mb-3.border-bottom
+                    h1.h2 Dashboard Overview
+                    .btn-toolbar.mb-2.mb-md-0
+                        .btn-group.me-2
+                            button.btn.btn-sm.btn-outline-secondary(type='button') Export
+
+                //- Current Stock Levels
+                .dashboard-card.card.mb-4
+                    .card-header.d-flex.justify-content-between.align-items-center
+                        span &#x1F4E6; Current Stock Levels
+                        small.text-muted Updated 5 minutes ago
+                    .table-responsive
+                        table.table.table-hover.mb-0
+                            thead
+                                tr
+                                    th Produce
+                                    th Current Stock
+                                    th Status
+                                    th Last Restock
+                                    th Action
+                            tbody
+                                each product in products
+                                    tr(class=product.lowStock ? 'table-warning' : '')
+                                        td= product.name
+                                        td= product.stock + "kgs"
+                                        td
+                                            if product.stock <= 0
+                                                span.badge.bg-danger Out of Stock
+                                            else if product.lowStock
+                                                span.badge.bg-warning Low Stock
+                                            else
+                                                span.badge.bg-success In Stock
+                                        td=helpers.formatDate(product.lastRestockDate)
+                                        td
+                                            a.btn.btn-sm.btn-success(href='/recordPayment') Record Sale
+
+                .row
+                    //- Recent Sales Activity
                     .col-md-6
-                      label.form-label Start Date
-                      input.form-control(type='date')
+                        .dashboard-card.card.h-100
+                            .card-header
+                                | &#x1F6CD;&#xFE0F; Recent Sales Activity
+                            .card-body
+                                .table-responsive
+                                    table.table.table-sm
+                                        thead
+                                            tr
+                                                th Type
+                                                th Buyer
+                                                th Product
+                                                th Tonnage (kg)
+                                                th Amount (UgX)
+                                                th Agent
+                                                th Date
+                                        tbody
+                                            each sale in recentSales
+                                                tr
+                                                    td
+                                                        span.badge(class=sale.cashSale ? 'bg-success' : 'bg-primary')
+                                                            = sale.cashSale ? 'CASH' : 'CREDIT'
+                                                    td= sale.cashBuyer ? sale.cashBuyer : sale.creditBuyer
+                                                    td= sale.cashSale ? sale.cashSale : sale.creditProduct
+                                                    td= sale.cashTonnage ? sale.cashTonnage : sale.creditTonnage
+                                                    td= sale.cashAmount ? helpers.formatCurrency(sale.cashAmount) : helpers.formatCurrency(sale.creditAmount)
+                                                    td= sale.cashAgent ? sale.cashAgent : sale.creditAgent
+                                                    td= helpers.formatDate(sale.cashDate ? sale.cashDate : sale.dispatchDate)
+
+                    //- Credit Payments
                     .col-md-6
-                      label.form-label End Date
-                      input.form-control(type='date')
-                  button.btn.btn-primary Generate Sales Report
-              .col-md-6
-                h5 Credit Reports
-                .mb-3
-                  select.form-select
-                    option All Credits
-                    option Pending Only
-                    option Paid Only
-                    option(value='Over due') Overdue Only
-                  button.btn.btn-primary Generate Credit Report
+                        .dashboard-card.card.h-100
+                            .card-header
+                                | &#x1F4B3; Credit Payments
+                            .card-body
+                                .table-responsive
+                                    table.table.table-sm
+                                        thead
+                                            tr
+                                                th Customer
+                                                th Product
+                                                th Tonnage (kg)
+                                                th Amount Due (UgX)
+                                                th Due Date
+                                                th Agent
+                                                th Status
+                                        tbody
+                                            each credit in creditSales
+                                                tr
+                                                    td= credit.creditBuyer
+                                                    td= credit.creditProduct
+                                                    td= credit.creditTonnage
+                                                    td= helpers.formatCurrency(credit.creditAmount)
+                                                    td= helpers.formatDate(credit.creditDueDate)
+                                                    td= credit.creditAgent
+                                                    td
+                                                        if credit.status === 'Pending'
+                                                            span.badge.bg-warning.text-dark Pending
+                                                        else if credit.status === "overdue"
+                                                            span.badge.bg-danger.text-light Overdue!!
+                                                        else
+                                                            span.badge.bg-success.text-light Paid
+                    //- Sales Trends
+                    .dashboard-card.card.mt-4
+                        .card-header.d-flex.justify-content-between.align-items-center
+                            span &#x1F4C8; Sales Trends (Last 30 Days)
+                            .btn-group
+                                button.btn.btn-sm.btn-outline-secondary Daily
+                                button.btn.btn-sm.btn-outline-secondary.active Weekly
+                                button.btn.btn-sm.btn-outline-secondary Monthly
+                        .card-body
+                            .chart-container
+                                div(style='background-color: #f8f9fa; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 4px;')
+                                    | [Chart should display here]
+                    //- Report Generation
+                    .dashboard-card.card.mt-4
+                        .card-header
+                            | &#x1F4C4; Generate Reports
+                        .card-body
+                            .row
+                                .col-md-6
+                                    h5 Sales Reports
+                                    .mb-3
+                                        .row
+                                            .col-md-6
+                                                label.form-label Start Date
+                                                input.form-control(type='date')
+                                            .col-md-6
+                                                label.form-label End Date
+                                                input.form-control(type='date')
+                                        button.btn.btn-primary Generate Sales Report
+                                .col-md-6
+                                    h5 Credit Reports
+                                    .mb-3
+                                        select.form-select
+                                            option All Credits
+                                            option Pending Only
+                                            option Paid Only
+                                            option(value='Over due') Overdue Only
+                                        button.btn.btn-primary Generate Credit Report
 
 script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js')

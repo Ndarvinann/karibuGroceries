@@ -1,147 +1,98 @@
-const express = require('express');
+
+// const express = require("express");
+// const router = express.Router();
+// const procurement=require('../model/procurementShema')
+
+// router.get("/addProduce", (req, res) => {
+//   res.render("procurement");
+// });
+
+// router.post("/addProduce", async(req, res) => {
+//   console.log("Request Body:", req.body);
+//   try {
+//     const { produce, kilos, cost } = req.body;
+//     const pricePerKg = cost / kilos; // Calculate price per kg for new entries
+//     //check if the produce already exists
+//     const markupPercentage = 0.30; // 30% markup
+//       const priceToSell = pricePerKg * (1 + markupPercentage);
+//     const existingProduce = await procurement.findOne({produce :produce.toLowerCase() });
+//     //if it exists 
+//     if(existingProduce){
+//       //update the stock
+//       existingProduce.kilos += parseFloat(kilos);
+//       existingProduce.totalCost += parseFloat(cost);
+//       existingProduce.priceToSell = parseFloat(priceToSell);
+//       await existingProduce.save();
+//     } else{
+//       //if produce doesnt exist, create a new entry
+//       await new procurement({
+//         produce: produce.toLowerCase(),
+//         kilos:parseFloat(kilos),
+//         cost: parseFloat(cost),
+//         totalCost: parseFloat(cost),
+//         pricePerKg: pricePerKg,
+//         priceToSell: priceToSell,
+//         dealerName: req.body.dealerName, 
+//         branchname: req.body.branchname,
+//         contact: req.body.contact,
+//         dateAndTime: new Date()
+//     }).save();
+//   }
+//     res.render("procurement");
+//     }catch(err){
+//     console.error("Error saving Produce", err.message);
+//     res.status(400).send("Failed to save produce: " + err.message);
+//   }
+// });
+
+// module.exports = router;
+
+const express = require("express");
 const router = express.Router();
+const procurement = require('../model/procurementShema');
 
-//import models
-const procurementShema = require('../model/procurementShema');
-const cashSaleSchema = require('../model/cashSaleSchema');
-const creditsaleSchema = require('../model/creditsaleSchema');
-
-
-//utility date format
-const formattedDateTime = ()=>{
-    const now = new Date();
-    return now.toISOString().slice(0,16);
-};
-
-router.get("/addCashPayment", (req,res)=>{
-    res.render('payments',{
-         currentDateTime: formattedDateTime,
-    agentName: 'Makanga Joe'
-    });
+// Route to render the procurement page
+router.get("/procurement", (req, res) => {
+  res.render("procurement");
 });
 
-router.post('/addCashPayment', async (req, res)=>{
-    console.log('ENTERING /addCashPayment POST ROUTE!'); // First log
-    console.log('POST request to /addCashPayment received:', req.body); // Log the request body
-    try {
-        const { cashSale, cashTonnage, cashAmount } = req.body;
-        const produce = cashSale.toLowerCase();
-        //find all procurements sorted oldest to newest
-        const procurements = await procurementShema.find({ produce })
-      .sort({ dateAndTime: 1 });
+router.post("/procurement", async(req, res) => {
+  try {
+    const { produce, kilos, cost } = req.body;
+    const pricePerKg = cost / kilos;
+    const markupPercentage = 0.30;
+    const priceToSell = pricePerKg * (1 + markupPercentage);
 
-      //calculate the total stock available
-      const totalStock = procurements.reduce((sum, procurement) => sum + procurement.kilos, 0);
-      const saleQty = parseFloat(cashTonnage);
+    // Check if the produce already exists
+    const existingProduce = await procurement.findOne({ produce: produce.toLowerCase() });
 
-      //validate stock
-      if (saleQty > totalStock) {
-        return res.status(400).render('payments', {
-          error: `Only ${totalStock} kg left in stock!`,
-          currentDateTime: formattedDateTime,
-          agentName: 'makanga Joe'
-        }); 
-        }
-
-        //deduct stock using first in first out method.
-        let remainingQty = saleQty;
-        let totalCostDeducted = 0;
-        const updates = [];
-
-    procurements.forEach(procurement =>{
-        if (remainingQty <= 0) return;
-
-        const deductQty = Math.min(procurement.kilos, remainingQty);
-        const costDeducted = (deductQty / procurement.kilos) * procurement.totalCost;
-
-        procurement.kilos -= deductQty;
-        remainingQty -= deductQty;
-        procurement.totalCost -= costDeducted;
-        totalCostDeducted += costDeducted;
-        updates.push(procurement.save()); // Save each updated procurement 
-    });
-    await Promise.all(updates);
-    
-    //record new sale
-     await new cashSaleSchema({
-     ...req.body,
-     cashCost: totalCostDeducted,
-     cashProfit: parseFloat(cashAmount) - totalCostDeducted
-     })
-     .save();
-          res.redirect('salesDash');
-
-    } catch (error) {
-        console.error("Sale failed:", error);
-    res.status(500).render('payments', {
-      error: "Sale processing failed",
-      currentDateTime: formattedDateTime,
-      agentName: req.session.user 
-    });
-  }
-});
- //for the creditPayments
- router.get('/addCreditPayment', (req,res)=>{
-    res.render('payments',{
-    currentDateTime: formattedDateTime,
-    agentName: 'makanga joe'
-  });
-});
-
- router.post('/addCreditPayment', async (req, res)=>{
-    try {
-        const { creditProduct, creditTonnage, creditAmount } = req.body;
-        const produce = creditProduct.toLowerCase();
-        //stock Management
-        const procurements = await procurementShema.find({ produce })
-        .sort({ dateAndTime: 1 });
-        const totalStock = procurements.reduce((sum, procurement) => sum + procurement.kilos, 0);
-        const saleQty = parseFloat(creditTonnage);
-
-        if (saleQty > totalStock) {
-            return res.status(400).render('payments', {
-                error: `Only ${totalStock} kg available!`,
-                currentDateTime: formattedDateTime,
-                agentName: 'makanga joe'
-            });
-        }
-         //deduct Stock
-         let remainingQty = saleQty;
-         let totalCostDeducted = 0;
-          const updates = [];
-
-        procurements.forEach(procurement => {
-            if (remainingQty <= 0) return;
-            const deductQty = Math.min(procurement.kilos, remainingQty);
-            const costDeducted = (deductQty / proc.kilos) * procurement.totalCost;
-            procurement.kilos -= deductQty;
-            procurement.totalCost -= costDeducted;
-            totalCostDeducted += costDeducted;
-            remainingQty -= deductQty;
-            updates.push(procurement.save());
-        });
-        //save all the updates at once
-        await Promise.all(updates)
-        //record this sale
-        // 2. Record sale
-        const creditSale = new creditsaleSchema({
-            ...req.body,
-            creditCost: totalCostDeducted,
-            creditProfit: parseFloat(creditAmount) - totalCostDeducted,
-            creditAgent: 'Makanga Joe'
-          });
-        await creditSale.save();
-        res.redirect('/salesDash');
-
-    } catch (error) {
-        console.error("Credit sale failed:", error);
-        res.status(500).render('payments', {
-            error: "Failed to process credit sale",
-            currentDateTime: formattedDateTime,
-            agentName: 'Makanga Joe'
-        });
+    if (existingProduce) {
+      // Update existing produce
+      existingProduce.kilos += parseFloat(kilos);
+      existingProduce.totalCost += parseFloat(cost);
+      existingProduce.priceToSell = parseFloat(priceToSell);
+      await existingProduce.save();
+    } else {
+      // Create new produce entry
+      await new procurement({
+        produce: produce.toLowerCase(),
+        kilos: parseFloat(kilos),
+        cost: parseFloat(cost),
+        totalCost: parseFloat(cost),
+        pricePerKg: pricePerKg,
+        priceToSell: priceToSell,
+        dealerName: req.body.dealerName,
+        branchname: req.body.branchname,
+        contact: req.body.contact,
+        dateAndTime: req.body.dateAndTime || new Date()
+      }).save();
     }
+
+    res.redirect("/procurement");
+  } catch(err) {
+    console.error("Error saving Produce:", err.message);
+    res.status(400).send("Failed to save produce: " + err.message);
+  }
 });
 
 module.exports = router;
-

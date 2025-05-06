@@ -5,15 +5,21 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "author": "Darvin Ann",
   "license": "ISC",
   "dependencies": {
+    "connect": "^3.7.0",
+    "connect-ensure-login": "^0.1.1",
     "connect-mongo": "^5.1.0",
     "dotenv": "^16.5.0",
+    "ensure": "^0.4.6",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
+    "local": "^0.3.3",
+    "login": "^0.8.0",
+    "moment": "^2.30.1",
     "mongoose": "^8.14.1",
     "nodemon": "^3.1.10",
     "passport": "^0.7.0",

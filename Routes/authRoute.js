@@ -39,15 +39,45 @@ router.get("/login", (req, res) => {
   res.render("login");
 });
 
+// router.post(
+//   "/login",
+//   passport.authenticate("local", { failureRedirect: "/login" }),
+//   (req, res) => {
+//     console.log(">>> /login POST route hit!");
+//     console.log("req.body:", req.body);
+//     console.log("req.user after authentication:", req.user);
+//     if (req.user && req.user.role === "manager") {
+//       console.log("Redirecting to /managerDash");
+//       res.redirect("/managerDash");
+//     } else if (req.user && req.user.role === "salesAgent") {
+//       console.log("Redirecting to /salesDash");
+//       res.redirect("/salesDash");
+//     } else if (req.user && req.user.role === "director") {
+//       console.log("Redirecting to /directorDash");
+//       res.redirect("/directorDash");
+//     } else if (req.user) {
+//       console.log("Role not defined or recognized:", req.user.role);
+//       res.send('"Role not defined, please contact admin"');
+//     } else {
+//       console.log("req.user is undefined after authentication.");
+//       res.send("Authentication successful, but user data not found.");
+//     }
+//   }
+// );
+
 router.post( "/login", passport.authenticate("local", { failureRedirect: "/login" }),
   (req, res) => {
   console.log(req.body);
+  req.session.user= req.user;
+
     if (req.user.role === "manager") {
+      console.log("Redirecting to /managerDash")
       res.redirect("/managerDash");
     } else if (req.user.role === "salesAgent") {
       res.redirect("/salesDash");
     } else if (req.user.role === "director") {
-      res.redirect("/report");
+      console.log(req.user)
+      res.redirect("/directorDash");
     }
     else{
       res.send('"Role not defined, please contact admin"')

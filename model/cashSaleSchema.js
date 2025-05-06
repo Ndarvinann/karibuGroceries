@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const cashSaleSchema = new mongoose.Schema({
   cashSale: {
     type: String,
     required: true,
-    enum:['Beans','Maize', 'Peas', 'SoyBeans', 'Gnuts'],
+
   },
   cashTonnage: {
     type: Number,
@@ -29,12 +30,16 @@ const cashSaleSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  cashCost: { 
-    type: Number, 
-  }, 
-cashProfit: { 
-  type: Number, 
-} ,
+  productId: { 
+  type: Schema.Types.ObjectId,
+   ref: 'Procurement'
+   } ,
+   cashCost: {
+    type: Number
+   },        
+  cashProfit: {
+    type:Number 
+  },
 });
 
 module.exports = mongoose.model("cashSale", cashSaleSchema);

@@ -1,171 +1,169 @@
-      doctype html
 head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title Karibu Groceries - Sales &amp; Credit Payments
-  link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"   integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous")
-  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
-  link(rel='stylesheet' href='/css/kglCss/payments.css')
-.container
-  .d-flex.justify-content-between.align-items-center.mb-4
-    h2.mb-0
-      i.fas.fa-cash-register.text-success.me-2
-      | Sales &amp; Credit Payments
-    .text-muted
-      i.fas.fa-user-circle.me-1
-      | &nbsp;Logged in as: 
-  ul#salesTabs.nav.nav-pills.mb-4(role='tablist')
-    li.nav-item(role='presentation')
-      button#cash-tab.nav-link.active(data-target='#cashSales' type='button' aria-controls='cashSales' aria-selected='true')
-        i.fas.fa-money-bill-wave.me-1
-        | &nbsp;Cash Sales
-    li.nav-item(role='presentation')
-      button#credit-tab.nav-link(data-target='#creditSales' type='button' aria-controls='creditSales' aria-selected='false')
-        i.fas.fa-credit-card.me-1
-        | &nbsp;Credit Sales
-  #salesTabsContent.tab-content
-    //- Cash Sales Tab
-    #cashSales.tab-pane.fade.show.active(role='tabpanel' aria-labelledby='cash-tab')
-      .card
-        .card-header
-          i.fas.fa-money-bill-wave
-          | &nbsp;Record Cash Sale
-        .card-body
-          form#cashSalesForm(action='/addCashPayment' method = "post")
-            .row
-              .col-md-6
-                .mb-3
-                  label.form-label(for='cashProduct')
-                    i.fas.fa-search.me-1
-                    | &nbsp;Produce Name
-                  input#cashProduct.form-control(type='text' list='cashProductList' placeholder='Type to search available products' required='' name='cashSale')
-                  datalist#cashProductList
-                    option(value='Beans')
-                    option(value='Maize')
-                    option(value='Peas')
-                    option(value='SoyBeans')
-                    option(value='Gnuts')
-              .col-md-6
-                .mb-3
-                  label.form-label(for='cashTonnage')
-                    i.fas.fa-weight.me-1
-                    | &nbsp;Tonnage (kg)
-                  input#cashTonnage.form-control(type='number' min='0.1' step='0.1' required='' name='cashTonnage')
-            .row
-              .col-md-6
-                .mb-3
-                  label.form-label(for='cashAmount')
-                    i.fas.fa-money-bill.me-1
-                    | &nbsp;Amount Paid (UgX)
-                  input#cashAmount.form-control(type='number' min='0' step='100' required='' name='cashAmount')
-              .col-md-6
-                .mb-3
-                  label.form-label(for='cashBuyer')
-                    i.fas.fa-user.me-1
-                    | &nbsp;Buyer Name
-                  input#cashBuyer.form-control(type='text' required='' name='cashBuyer')
-            .row
-              .col-md-6
-                .mb-3
-                  label.form-label(for='cashAgent')
-                    i.fas.fa-user-tie.me-1
-                    | &nbsp;Sales Agent
-                  input#cashAgent.form-control.readonly-field(type='text' value='Makanga Joe' readonly='' name='cashAgent')
-              .col-md-6
-                .mb-3
-                  label.form-label(for='cashDate')
-                    i.fas.fa-calendar-alt.me-1
-                    | &nbsp;Date &amp; Time
-                  input#cashDate.form-control.readonly-field(type='datetime-local', readonly name='cashDate')
-            button.btn.btn-primary.mt-3(type='submit')
-              i.fas.fa-save
-              | &nbsp;Record Cash Sale
-    //- Credit Sales Tab
-    #creditSales.tab-pane.fade(role='tabpanel' aria-labelledby='credit-tab')
-      .card
-        .card-header
-          i.fas.fa-credit-card
-          | &nbsp;Record Credit Sale
-        .card-body
-          form#creditSalesForm(action='/addCreditPayment' method='post')
-            .form-section
-              h5
-                i.fas.fa-user-circle
-                | &nbsp;Buyer Information
-              .row
-                .col-md-6
-                  .mb-3
-                    label.form-label(for='creditBuyer') Buyer Name
-                    input#creditBuyer.form-control(type='text' required='' name='creditBuyer')
-                .col-md-6
-                  .mb-3
-                    label.form-label(for='creditNIN') National ID (NIN)
-                    input#creditNIN.form-control(type='text' required='' name='creditNIN')
-              .row
-                .col-md-6
-                  .mb-3
-                    label.form-label(for='creditLocation') Buyer Location
-                    input#creditLocation.form-control(type='text' required='' name='creditLocation')
-                .col-md-6
-                  .mb-3
-                    label.form-label(for='creditContact') Buyer Contact
-                    input#creditContact.form-control(type='tel' required='' name='creditContact')
-            .form-section
-              h5
-                i.fas.fa-file-invoice-dollar
-                | &nbsp;Payment Terms
-              .row
-                .col-md-6
-                  .mb-3
-                    label.form-label(for='creditAmount') Amount Due (UgX)
-                    input#creditAmount.form-control(type='number' min='0' step='100' required='' name='creditAmount')
-                .col-md-6
-                  .mb-3
-                    label.form-label(for='creditDueDate') Due Date
-                    input#creditDueDate.form-control(type='date' required='' name='creditDueDate')
-            .form-section
-              h5
-                i.fas.fa-boxes
-                | &nbsp;Product Information
-              .row
-                .col-md-6
-                  .mb-3
-                    label.form-label(for='creditProduct') Produce Name
-                    input#creditProduct.form-control(type='text' list='creditProductList' placeholder='Type to search available products' required='' name='creditProduct')
-                    datalist#creditProductList
-                      option(value='Beans')
-                      option(value='Maize')
-                      option(value='Peas')
-                      option(value='SoyBeans')
-                      option(value='Gnuts')
-                .col-md-6
-                  .mb-3
-                    label.form-label(for='creditProduceType') Produce Type
-                    select#creditProduceType.form-select(required='')
-                      option(value='') Select type
-                      option(value='Grains') Grains
-                      option(value='Legumes') Legumes
-                      option(value='Seeds') Seeds
-                      option(value='Other') Other
-              .row
-                .col-md-6
-                  .mb-3
-                    label.form-label(for='creditTonnage') Tonnage (kg)
-                    input#creditTonnage.form-control(type='number' min='0.1' step='0.1' required='' name='creditTonnage')
-                .col-md-6
-                  .mb-3
-                    label.form-label(for='creditDispatchDate') Date of Dispatch
-                    input#creditDispatchDate.form-control(type='date' required='' name='dispatchDate')
-            .mb-3
-              label.form-label(for='creditAgent')
-                i.fas.fa-user-tie.me-1
-                | &nbsp;Sales Agent
-              input#creditAgent.form-control.readonly-field(type='text' value='Makanga Joe' readonly='')
-            button.btn.btn-primary.mt-3(type='submit')
-              i.fas.fa-save
-              | &nbsp;Record Credit Sale
-//- JavaScript Libraries
-//- script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous")
-script(src='/filejs/payments.js')  
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    title Karibu Groceries - Sales &amp; Credit Payments
+    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous")
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
+    link(rel='stylesheet' href='/kglCss/payments.css')
+body
+    .container
+        .d-flex.justify-content-between.align-items-center.mb-4
+            h2.mb-0
+                i.fas.fa-cash-register.text-success.me-2
+                | Sales &amp; Credit Payments
+            .text-muted
+                i.fas.fa-user-circle.me-1
+                | &nbsp;Logged in as: #{username}
 
+        ul#salesTabs.nav.nav-pills.mb-4(role='tablist')
+            li.nav-item(role='presentation')
+                button#cash-tab.nav-link.active(data-target='#cashSales' type='button' aria-controls='cashSales' aria-selected='true')
+                    i.fas.fa-money-bill-wave.me-1
+                    | &nbsp;Cash Sales
+            li.nav-item(role='presentation')
+                button#credit-tab.nav-link(data-target='#creditSales' type='button' aria-controls='creditSales' aria-selected='false')
+                    i.fas.fa-credit-card.me-1
+                    | &nbsp;Credit Sales
 
+        #salesTabsContent.tab-content
+            //- Cash Sales Tab
+            #cashSales.tab-pane.fade.show.active(role='tabpanel' aria-labelledby='cash-tab')
+                .card
+                    .card-header
+                        i.fas.fa-money-bill-wave
+                        | &nbsp;Record Cash Sale
+                    .card-body
+                        form#cashSalesForm(method="post" action="/addCashPayment")
+                            .row
+                                .col-md-6
+                                    .mb-3
+                                        label.form-label(for='cashProduct')
+                                            i.fas.fa-search.me-1
+                                            | &nbsp;Produce Name
+                                        input#cashProduct.form-control(type='text' list='cashProductList' placeholder='Type to search available products' required='' name='cashSale')
+                                        datalist#cashProductList
+                                            if allProducts
+                                                each prod in allProducts
+                                                    option(value=prod.produce)
+                                .col-md-6
+                                    .mb-3
+                                        label.form-label(for='cashTonnage')
+                                            i.fas.fa-weight.me-1
+                                            | &nbsp;Tonnage (kg)
+                                        input#cashTonnage.form-control(type='number' min='0.1' step='0.1' required='' name='cashTonnage')
+                            .row
+                                .col-md-6
+                                    .mb-3
+                                        label.form-label(for='cashAmount')
+                                            i.fas.fa-money-bill.me-1
+                                            | &nbsp;Amount Paid (UgX)
+                                        input#cashAmount.form-control(type='number' min='0' step='100' required='' name='cashAmount')
+                                .col-md-6
+                                    .mb-3
+                                        label.form-label(for='cashBuyer')
+                                            i.fas.fa-user.me-1
+                                            | &nbsp;Buyer Name
+                                        input#cashBuyer.form-control(type='text' required='' name='cashBuyer')
+                            .row
+                                .col-md-6
+                                    .mb-3
+                                        label.form-label(for='cashAgent')
+                                            i.fas.fa-user-tie.me-1
+                                            | &nbsp;Sales Agent
+                                        input#cashAgent.form-control.readonly-field(type='text' value=username readonly='' name='cashAgent')
+                                .col-md-6
+                                    .mb-3
+                                        label.form-label(for='cashDate')
+                                            i.fas.fa-calendar-alt.me-1
+                                            | &nbsp;Date &amp; Time
+                                        input#cashDate.form-control.readonly-field(type='datetime-local' value=today name='cashDate')
+                            button.btn.btn-primary.mt-3(type='submit')
+                                i.fas.fa-save
+                                | &nbsp;Record Cash Sale
+
+            //- Credit Sales Tab
+            #creditSales.tab-pane.fade(role='tabpanel' aria-labelledby='credit-tab')
+                .card
+                    .card-header
+                        i.fas.fa-credit-card
+                        | &nbsp;Record Credit Sale
+                    .card-body
+                        form#creditSalesForm(method='post' action="/addCreditPayment")
+                            .form-section
+                                h5
+                                    i.fas.fa-user-circle
+                                    | &nbsp;Buyer Information
+                                .row
+                                    .col-md-6
+                                        .mb-3
+                                            label.form-label(for='creditBuyer') Buyer Name
+                                            input#creditBuyer.form-control(type='text' required='' name='creditBuyer')
+                                    .col-md-6
+                                        .mb-3
+                                            label.form-label(for='creditNIN') National ID (NIN)
+                                            input#creditNIN.form-control(type='text' required='' name='creditNIN')
+                                .row
+                                    .col-md-6
+                                        .mb-3
+                                            label.form-label(for='creditLocation') Buyer Location
+                                            input#creditLocation.form-control(type='text' required='' name='creditLocation')
+                                    .col-md-6
+                                        .mb-3
+                                            label.form-label(for='creditContact') Buyer Contact
+                                            input#creditContact.form-control(type='tel' required='' name='creditContact')
+                            .form-section
+                                h5
+                                    i.fas.fa-file-invoice-dollar
+                                    | &nbsp;Payment Terms
+                                .row
+                                    .col-md-6
+                                        .mb-3
+                                            label.form-label(for='creditAmount') Amount Due (UgX)
+                                            input#creditAmount.form-control(type='number' min='0' step='100' required='' name='creditAmount')
+                                    .col-md-6
+                                        .mb-3
+                                            label.form-label(for='creditDueDate') Due Date
+                                            input#creditDueDate.form-control(type='date' required='' name='creditDueDate')
+                            .form-section
+                                h5
+                                    i.fas.fa-boxes
+                                    | &nbsp;Product Information
+                                .row
+                                    .col-md-6
+                                        .mb-3
+                                            label.form-label(for='creditProduct') Produce Name
+                                            input#creditProduct.form-control(type='text' list='creditProductList' placeholder='Type to search available products' required='' name='creditProduct')
+                                            datalist#creditProductList
+                                                if allProducts
+                                                    each prod in allProducts
+                                                        option(value=prod.produce)
+                                    .col-md-6
+                                        .mb-3
+                                            label.form-label(for='creditProduceType') Produce Type
+                                            select#creditProduceType.form-select(required='')
+                                                option(value='') Select type
+                                                option(value='Grains') Grains
+                                                option(value='Legumes') Legumes
+                                                option(value='Seeds') Seeds
+                                                option(value='Other') Other
+                                .row
+                                    .col-md-6
+                                        .mb-3
+                                            label.form-label(for='creditTonnage') Tonnage (kg)
+                                            input#creditTonnage.form-control(type='number' min='0.1' step='0.1' required='' name='creditTonnage')
+                                    .col-md-6
+                                        .mb-3
+                                            label.form-label(for='creditDispatchDate') Date of Dispatch
+                                            input#creditDispatchDate.form-control(type='date' required='' name='dispatchDate')
+                            .mb-3
+                                label.form-label(for='creditAgent')
+                                    i.fas.fa-user-tie.me-1
+                                    | &nbsp;Sales Agent
+                                input#creditAgent.form-control.readonly-field(type='text' value=username readonly='' name='creditAgent')
+                            button.btn.btn-primary.mt-3(type='submit')
+                                i.fas.fa-save
+                                | &nbsp;Record Credit Sale
+
+    //- JavaScript Libraries
+    //script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous")
+    script(src='/filejs/payments.js')

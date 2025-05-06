@@ -22,17 +22,17 @@ const adjustedStock = require('./model/stockAdjustmentSchema');
 
 //2.instatiations
 const app = express();
-const PORT = 3002;
+const PORT = 3005;
 
 //import routes here
-const authRoutes = require("./routes/authRoute");
-const procurementRoutes = require("./routes/procurementRoute");
-const managerRoutes = require("./routes/managerRoute");
-const reportRoutes = require("./routes/directorDashRoute");
-const paymentRoutes = require("./routes/paymentsRoute");
-const resetPassword = require("./routes/resetPassword");
-const salesDash = require("./routes/salesDash");
-const directorRoute = require("./routes/directorDashRoute");
+const authRoutes = require("./Routes/authRoute");
+const procurementRoutes = require("./Routes/procurementRoute");
+const managerRoutes = require("./Routes/managerRoute");
+const reportRoutes = require("./Routes/directorDashRoute");
+const paymentRoutes = require("./Routes/paymentsRoute");
+const resetPassword = require("./Routes/resetPassword");
+const salesDash = require("./Routes/salesDash");
+const directorRoute = require("./Routes/directorDashRoute");
 //3.configurations
 
 app.locals.moment = moment;

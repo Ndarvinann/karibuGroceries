@@ -4,7 +4,7 @@ head
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css')
   link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css')
-  link(rel='stylesheet' href='/css/kglCss/signUp.css')
+  link(rel='stylesheet' href='/kglCss/signup.css')
   title KGL | Sign Up
 .bg-grains
 .bg-overlay
@@ -48,17 +48,28 @@ head
                 i.bi.bi-telephone-fill.text-success
               input#phone.form-control(type='tel' required='' placeholder='' name='phoneNumber')
             span#phoneError.text-danger.error-message
-        .text-start.mb-1
-          label.form-label(for='role') Role
-          .input-group
-            span.input-group-text
-              i.bi.bi-person-vcard-fill.text-success
-            select#role.form-select(required='' name='role')
-              option(value='' disabled='' selected='') Select role
-              option(value='salesAgent') Sales Agent
-              option(value='manager') Manager
-              option(value='director') Director
-          span#roleError.text-danger.error-message
+        .row.row-compact
+          .col-md-6.text-start
+            label.form-label(for='role') Role
+            .input-group
+              span.input-group-text
+                i.bi.bi-person-vcard-fill.text-success
+              select#role.form-select(required='' name='role')
+                option(value='' disabled='' selected='') Select role
+                option(value='salesAgent') Sales Agent
+                option(value='manager') Manager
+                option(value='director') Director
+            span#roleError.text-danger.error-message
+          .col-md-6.text-start
+            label.form-label(for='branch') Branch
+            .input-group
+              span.input-group-text
+                i.bi.bi-shop.text-success
+              select#branch.form-select(required='' name='branch')
+                option(value='' disabled='' selected='') Select branch
+                option(value='Matuga') Matuga
+                option(value='Maganjo') Maganjo
+            span#branchError.text-danger.error-message
         .row.row-compact
           .col-md-6.text-start
             label.form-label(for='password') Password
@@ -90,4 +101,3 @@ head
     p.mb-0.small &copy; 2025 KGL. All Rights Reserved
 //-script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
 //-script(src='/filejs/signup.js')
-

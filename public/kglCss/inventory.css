@@ -105,22 +105,22 @@ body {
 .badge-stock {
     padding: 5px 10px;
     border-radius: 20px;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .badge-high {
     background-color: rgba(40, 167, 69,0.8);
-    color: var(--primary-green);
+    color: white
 }
 
 .badge-medium {
     background-color: rgba(255, 193, 7,1);
-    color: #d39e00;
+    color: white
 }
 
 .badge-low {
     background-color: rgba(220, 53, 69,1);
-    color: #dc3545;
+    color: white
 }
 
 .search-container {

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const creditSaleSchema = new mongoose.Schema({
     creditBuyer:{
@@ -33,13 +34,13 @@ const creditSaleSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["Pending", "Paid", "Overdue"],
-        default: "Pending"
+        //enum: ["Pending", "Paid", "Overdue"],
+        // default: "Pending"
     },
     creditProduct:{
         type: String,
         required: true,
-        enum:['Beans','Maize', 'Peas', 'SoyBeans', 'Gnuts'],
+        //enum:['Beans','Maize', 'Peas', 'SoyBeans', 'Gnuts'],
     },
     creditTonnage:{
         type:Number,
@@ -60,5 +61,9 @@ creditCost: {
 creditProfit: {
      type: Number, 
    },
+   productId: {
+     type: Schema.Types.ObjectId, 
+   ref: 'procurement' 
+    },
 });
 module.exports = mongoose.model('creditSale', creditSaleSchema);

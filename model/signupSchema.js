@@ -31,6 +31,11 @@ const signupSchema = new mongoose.Schema({
     //enum: ["salesAgent", "manager", "director"],
     //default: "salesAgent"
   },
+  branch:{
+    type: String,
+    trim: true,
+    required: true,
+  },
   });
 signupSchema.plugin(passportLocalMongoose,{
     usernameField:'email',
