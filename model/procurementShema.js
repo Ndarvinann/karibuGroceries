@@ -44,7 +44,7 @@ const procurementShema = new mongoose.Schema({
     initialKilos: {
         type: Number,
         trim: true,
-        required: true,
+      
     },
 });
 module.exports = mongoose.model('procurement', procurementShema);
