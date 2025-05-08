@@ -1,3 +1,4 @@
+// D:\workspace\karibuGroceries\views\inventory.pug
 doctype html
 html
   head
@@ -109,7 +110,7 @@ html
             .col-md-3
               select.form-select#bulkAdjustProduct
                 option(selected='') Select product
-                option gnuts 
+                option gnuts
                 option maize
                 option beans
                 option cow-peas
@@ -141,7 +142,7 @@ html
                   each procurement in procurementHistory
                     .log-item
                       .d-flex.justify-content-between
-                        strong #{procurement.produce.charAt(0) + procurement.produce.slice(1)} - #{procurement.kilos}kg
+                        strong #{procurement.produce.charAt(0).toUpperCase() + procurement.produce.slice(1)} - #{procurement.kilos}kg
                         span.text-success +#{procurement.cost.toLocaleString()} UGX
                       .log-date #{new Date(procurement.dateAndTime).toLocaleDateString()} from #{procurement.branchname}
                 else
@@ -156,61 +157,64 @@ html
                   each adjustment in adjustmentHistory
                     .log-item
                       .d-flex.justify-content-between
-                        strong #{adjustment.product.charAt(0).toUpperCase() + adjustment.product.slice(1)} - Adjusted #{adjustment.quantityAdjusted > 0 ? '+' : ''}#{adjustment.quantityAdjusted}kg
+                        if adjustment.product && adjustment.product.produce
+                          strong #{adjustment.product.produce.charAt(0).toUpperCase() + adjustment.product.produce.slice(1)} - Adjusted #{adjustment.quantityAdjusted > 0 ? '+' : ''}#{adjustment.quantityAdjusted}kg
+                        else
+                          strong Product Unavailable - Adjusted #{adjustment.quantityAdjusted > 0 ? '+' : ''}#{adjustment.quantityAdjusted}kg
                         span.text-danger(class=adjustment.quantityAdjusted > 0 ? 'text-success' : 'text-danger') #{adjustment.reason}
                       .log-date #{adjustment.adjustedBy} on #{new Date(adjustment.adjustmentDate).toLocaleDateString()}
                 else
                   p No stock adjustment history available.
 
-    //- New Procurement Modal
-    #newProcurementModal.modal.fade(tabindex='-1' aria-hidden='true')
-      .modal-dialog.modal-lg
-        .modal-content
-          .modal-header
-            h5.modal-title.text-success &#x1F6D2; New Procurement
-            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
-          .modal-body
-            form(action='/managerDash' method='POST')
-              .row.mb-3
-                .col-md-6
-                  label.form-label Product
-                  select.form-select#modalProductSelect
-                    option(selected='') Select product
-                    option Beans
-                    option Maize
-                    option Peas
-                    option Soy Beans
-                    option Groundnuts
-                .col-md-6
-                  label.form-label Quantity
-                  input.form-control#modalQuantity(type='number' placeholder='Enter quantity' min='0')
-              .row.mb-3
-                .col-md-6
-                  label.form-label Source
-                  select.form-select#modalSourceSelect
-                    option(selected='') Select source
-                    option Mattuga Branch
-                    option Maganjo Branch
-                    option Local Trader
-                    option Other Supplier
-                .col-md-6
-                  label.form-label Buying Price (UGX)
-                  input.form-control#modalBuyingPrice(type='number' placeholder='Enter price per Kg' min='0')
-              .row.mb-3
-                .col-md-6
-                  label.form-label Date
-                  input.form-control#modalDate(type='date')
-                .col-md-6
-                  label.form-label Selling Price (UGX)
-                  input.form-control#modalSellingPrice(type='number' placeholder='Will auto-calculate' readonly)
-              .mb-3
-                label.form-label Notes
-                textarea.form-control#modalNotes(rows='3' placeholder='Any additional notes...')
-          .modal-footer
-            button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Cancel
-            button.btn.btn-success(type='button')
-              i.fas.fa-save.me-2
-              | Save Procurement
+      //- New Procurement Modal
+      #newProcurementModal.modal.fade(tabindex='-1' aria-hidden='true')
+        .modal-dialog.modal-lg
+          .modal-content
+            .modal-header
+              h5.modal-title.text-success &#x1F6D2; New Procurement
+              button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+            .modal-body
+              form(action='/managerDash' method='POST')
+                .row.mb-3
+                  .col-md-6
+                    label.form-label Product
+                    select.form-select#modalProductSelect
+                      option(selected='') Select product
+                      option Beans
+                      option Maize
+                      option Peas
+                      option Soy Beans
+                      option Groundnuts
+                  .col-md-6
+                    label.form-label Quantity
+                    input.form-control#modalQuantity(type='number' placeholder='Enter quantity' min='0')
+                .row.mb-3
+                  .col-md-6
+                    label.form-label Source
+                    select.form-select#modalSourceSelect
+                      option(selected='') Select source
+                      option Mattuga Branch
+                      option Maganjo Branch
+                      option Local Trader
+                      option Other Supplier
+                  .col-md-6
+                    label.form-label Buying Price (UGX)
+                    input.form-control#modalBuyingPrice(type='number' placeholder='Enter price per Kg' min='0')
+                .row.mb-3
+                  .col-md-6
+                    label.form-label Date
+                    input.form-control#modalDate(type='date')
+                  .col-md-6
+                    label.form-label Selling Price (UGX)
+                    input.form-control#modalSellingPrice(type='number' placeholder='Will auto-calculate' readonly)
+                .mb-3
+                  label.form-label Notes
+                  textarea.form-control#modalNotes(rows='3' placeholder='Any additional notes...')
+            .modal-footer
+              button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Cancel
+              button.btn.btn-success(type='button')
+                i.fas.fa-save.me-2
+                | Save Procurement
 
     //- bootstrap
     script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
